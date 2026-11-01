@@ -13,14 +13,14 @@ const MAX_AMOUNT = 9_999_999_999.99;
 export const transactionSchema = z
   .object({
     type: z.enum(TRANSACTION_TYPES, { errorMap: () => ({ message: 'Choose income or expense' }) }),
-    amount: z
-      .string()
-      .trim()
-      .min(1, 'Amount is required')
-      .regex(/^\d+(\.\d{1,2})?$/, 'Enter a valid amount, such as 450 or 450.50')
-      .transform(Number)
-      .refine((value) => value > 0, 'Amount must be greater than 0')
-      .refine((value) => value <= MAX_AMOUNT, 'Amount is too large'),
+    amount: z.coerce
+  .string()
+  .trim()
+  .min(1, 'Amount is required')
+  .regex(/^\d+(\.\d{1,2})?$/, 'Enter a valid amount, such as 450 or 450.50')
+  .transform(Number)
+  .refine((value) => value > 0, 'Amount must be greater than 0')
+  .refine((value) => value <= MAX_AMOUNT, 'Amount is too large'),
     description: z.string().trim().min(1, 'Description is required').max(120, 'Keep the description under 120 characters'),
     category: z
       .string()
